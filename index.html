@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            background: linear-gradient(135deg, #a7b9bb 0%, #bac5cc 100%);
+        }
+
+        .main{
+            position: relative;
+            height: calc(100vh - 40px);
+            max-width: 900px;
+            margin: auto;
+            margin-top: 20px;
+            background-color: #d0d0d0;
+            border: 3px solid white;
+            border-radius: 30px;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .msg_area{
+            position: absolute;
+            width: 100%;
+            height: calc(100% - 103px);
+            background-image: url("https://github.com/mvpeskova/chat_bot/blob/main/pictures/pattern2.png?raw=true");
+            overflow: auto;
+        }
+        .header{
+            margin: auto;
+            padding: 15px;
+            text-align: center;
+            color: #5b5b5b;
+            background: #d0d0d0;
+            border-bottom: 3px solid white;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+        }
+        .refresh {
+            position: absolute;
+            top: 10px;
+            width: 30px;
+            height: 22px;
+            right: 20px;
+            border: none;
+            cursor: pointer;
+            appearance: none;
+            background-color: inherit;
+        }
+        .update {
+            position: absolute;
+            right: 0;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            height: 22px;
+            transition: .2s;
+        }
+        .update.hover {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+        .refresh:hover .update.hover {
+            opacity: 1;
+            transform: rotate(180deg);
+        }
+        .refresh:hover .update {
+            opacity: 0;
+            transform: rotate(180deg);
+        }
+        .left_message{
+            display: flex;
+            max-width: 60%;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .right_message{
+            display: flex;
+            max-width: 60%;
+            flex-direction: row-reverse;
+            margin: 20px 20px 20px auto;
+        }
+        .left_msg{
+            min-width: 100px;
+            margin-left: 10px;
+            padding: 10px 10px 15px 10px;
+            border-bottom-right-radius: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background: linear-gradient(135deg, #53cb9e 0%, #6b9fb9 100%);
+            font-family: 'Microsoft JhengHei';
+        }
+        .right_msg{
+            min-width: 100px;
+            margin-right: 10px;
+            padding: 10px 10px 15px 10px;
+            border-bottom-left-radius: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, #30627c 0%, #275d8a 100%);
+            font-family: 'Microsoft JhengHei';
+        }
+        .mes_info{
+            display: flex;
+            margin-bottom: 5px;
+            margin-left: 6px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .mes_header{
+            margin-right: 6px;
+            max-width: 60%;
+        }
+        .mes_time{
+            margin: auto 1px 5px auto;
+            font-size: 0.5em;
+        }
+        .mes_text{
+            margin-left: 6px;
+        }
+        .icon{
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            margin: auto 0 0 0;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-image: url("https://github.com/mvpeskova/chat_bot/blob/main/pictures/icon.png?raw=true");
+            border-radius: 50%;
+        }
+        .header_bottom{
+            position: absolute;
+            display: flex;
+            width: 100%;
+            height: 50px;
+            bottom: 0;
+            background: #d0d0d0;
+            border-top: 3px solid white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+        .input_area{
+            display: flex;
+            width: 60%;
+            flex: 1;
+            margin: 8px 3px 8px 11px;
+            padding: 2px 2px 2px 10px;
+            border: none;
+            border-radius: 5px 5px 5px 15px;
+            font-size: 1em;
+        }
+        .send_button{
+            width: 6%;
+            margin: 8px 8px 8px 3px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px 5px 15px 5px;
+            color: #ffffff;
+            background-color: #2aa59b;
+            transition-duration: 0.3s;
+        }
+        .send_button:hover{
+            background-color: #1d5893;
+        }
+        .sidebar {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #708c9b;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            transition: top 400ms;
+            z-index: 100;
+        }
+        .button {
+            display: block;
+            position: absolute;
+            left: 50px;
+            top: 0;
+            width: 50px;
+            cursor: pointer;
+            background: #2ca18c;
+            border-radius: 0 0 5px 5px;
+            padding: 8px 5px;
+            color: #FFF;
+            text-align: center;
+            transition: all 400ms;
+            box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+            z-index: 101;
+        }
+        .button:hover {
+            box-shadow: 0 2px 2px 0 black;
+        }
+
+        .button:after {
+            content: 'info';
+        }
+
+        .down:checked ~ .sidebar {
+            z-index: 100;
+            top: 0
+        }
+
+        .down:checked ~ .button {
+            top: 100px;
+            z-index: 101;
+        }
+
+
+        .down:checked + .button {
+            background: #ffffff;
+            color: #2aa59b;
+        }
+
+        .info{
+            color: #FFFFFF;
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<input class="down" id="click" type="checkbox" hidden>
+<label class="button" for="click"></label>
+<div class="sidebar">
+    <div class="info">
+        Here can be some information about chatbot
+    </div>
+</div>
+    <div class="main">
+        <div class="header">Movie Theatre ChatBot</div>
+        <button class="refresh" type="submit">
+            <img class="update" src="https://github.com/mvpeskova/chat_bot/blob/main/pictures/update_grey.png?raw=true">
+            <img class="update hover" src="https://github.com/mvpeskova/chat_bot/blob/main/pictures/update_green.png?raw=true">
+        </button>
+        <div class="msg_area">
+            <div class="left_message">
+                <div class="icon" style="background-image: url(https://cdn-icons-png.flaticon.com/512/3607/3607444.png)"></div>
+                <div class="left_msg">
+                    <div class="mes_info">
+                        <div class="mes_header">BOT</div>
+                        <div class="mes_time">12:15</div>
+                    </div>
+                    <div class="mes_text">Hello, welcome to the movie chat! Go ahead and send me a message.</div>
+                </div>
+            </div>
+
+            <div class="right_message">
+                <div class="icon"></div>
+                <div class="right_msg">
+                    <div class="mes_info">
+                        <div class="mes_header">User</div>
+                        <div class="mes_time">12:15</div>
+                    </div>
+                    <div class="mes_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="header_bottom">
+            <input class="input_area" type="text" placeholder="Enter something..">
+            <button class="send_button" type="submit">Send</button>
+        </div>
+    </div>
+</body>
+</html>
